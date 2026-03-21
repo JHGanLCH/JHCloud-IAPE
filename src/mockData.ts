@@ -836,7 +836,7 @@ export const mockDashboardStats: DashboardStats = {
       id: 'comp-d-1',
       subject: 'COMPREHENSIVE',
       period: 'DAILY',
-      summary: '今日生产运行平稳。总装车间交付2台VMC-850机床，关键工序节拍符合预期。昨日夜班期间出现一次主轴箱装配小幅滞后，已于今日早班通过人员调配追回进度。当前全线无重大异常。',
+      summary: '当日生产运行整体稳健。生产进展方面，总装车间已顺利完成2台VMC-850机床的最终调试并入库，精加工车间主轴箱加工进度达92%，预计今日下班前可按计划交付。异常处理方面，上午10:15发现2号龙门铣床主轴温升异常，维修团队已于11:30完成传感器更换并恢复运行，通过临时加班已追回受影响的1.5小时工时。当前全线无未处理的重大瓶颈。',
       metrics: [
         { label: '当日产出', value: '2台', trend: 'STABLE', description: '符合计划排产' },
         { label: '工序达成率', value: '98.5%', trend: 'UP', description: '较昨日提升1.2%' },
@@ -844,21 +844,23 @@ export const mockDashboardStats: DashboardStats = {
         { label: '当日OEE', value: '84.2%', trend: 'UP', description: '设备状态良好' }
       ],
       alerts: [
-        { type: 'INFO', message: '总装A线今日完成TC-200首台样机底座安装。' },
-        { type: 'WARNING', message: '精密研磨工序刀具寿命接近临界点，预计明早需更换。' }
+        { type: 'INFO', message: '总装A线今日完成TC-200首台样机底座安装，进度超前5%。' },
+        { type: 'WARNING', message: '精密研磨工序刀具寿命预警（剩余8%），预计明早需更换。' },
+        { type: 'WARNING', message: '铸件供应商反馈下周到货可能存在2天波动，需提前核实。' }
       ],
       suggestions: [
-        '关注明早精密研磨工序的刀具更换，确保不影响后续装配。',
-        '夜班交接需重点确认TC-200样机的安装精度数据。'
+        '建议明早班前对精密研磨工序进行预防性刀具更换，避免生产中断。',
+        '采购部需在今日下班前与铸件供应商确认下周具体的到货批次与时间。',
+        '夜班交接需重点关注TC-200样机的安装精度数据记录。'
       ]
     },
     {
       id: 'comp-w-1',
       subject: 'COMPREHENSIVE',
       period: 'WEEKLY',
-      summary: '本周任务完成情况良好，周计划达成率达102%。上周遗留的供应链短缺问题已在本周二得到彻底解决。本周重点机型HMC-630进入总装高峰期，质量表现稳定。人员效率较上周有显著提升。',
+      summary: '本周生产任务达成情况优于预期。本周计划产出8台，实际完成9台，周计划达成率112.5%。生产进展方面，HMC-630系列进入总装冲刺阶段，关键节点提前24小时达成。异常处理方面，周三发生的铸件涂装起泡问题已通过调整烘干工艺参数解决，受影响的3件产品已完成返修。预警建议方面，下周预计有大范围降温，需重点监控恒温车间的温控系统稳定性。',
       metrics: [
-        { label: '周计划达成率', value: '102%', trend: 'UP', description: '较上周提升5%' },
+        { label: '周计划达成率', value: '112.5%', trend: 'UP', description: '较上周提升5.2%' },
         { label: '周平均产出', value: '1.8台/日', trend: 'UP', description: '产能释放明显' },
         { label: '质量一次合格率', value: '97.8%', trend: 'STABLE' },
         { label: '周设备停机时间', value: '3.5h', trend: 'DOWN', description: '较上周减少2h' }
@@ -876,9 +878,9 @@ export const mockDashboardStats: DashboardStats = {
       id: 'comp-m-1',
       subject: 'COMPREHENSIVE',
       period: 'MONTHLY',
-      summary: '本月关键经营指标稳步提升，产品生产和交付情况符合预期。紧急任务“TC-200样机试制”已按期完成关键节点。本月解决了一项重大质量问题（主轴箱温升超标），资源配套方面，关键轴承的到货周期仍有波动，需加强协调。',
+      summary: '本月经营指标稳健增长。关键经营指标方面，营收达成率105%，订单交付率96.5%。产品生产方面，本月累计交付24台，其中VMC系列占比60%。紧急任务方面，“TC-200样机试制”已按期完成关键节点。重大质量问题方面，成功攻克了主轴箱温升超标难题，通过优化润滑系统使温升降低了8℃。资源配套方面，关键轴承到货周期仍有波动，已通过协调供应商增加安全库存储备。',
       metrics: [
-        { label: '月度达成率', value: '94.2%', trend: 'UP', description: '较上月提升1.8%' },
+        { label: '月度营收达成', value: '105%', trend: 'UP', description: '较上月提升1.8%' },
         { label: '订单交付率', value: '96.5%', trend: 'UP', description: '交付能力增强' },
         { label: '质量损失率', value: '1.2%', trend: 'DOWN', description: '下降0.3%' },
         { label: '库存周转率', value: '4.2', trend: 'UP', description: '物料流转加速' }
@@ -897,7 +899,7 @@ export const mockDashboardStats: DashboardStats = {
       id: 'comp-q-1',
       subject: 'COMPREHENSIVE',
       period: 'QUARTERLY',
-      summary: '本季度关键经营指标表现优异，产品生产和交付总量较去年同期增长15%。重点任务“数字化工厂一期上线”圆满完成。重大质量问题解决率达100%。资源配套方面，通过引入第二供应商，有效缓解了铸件供应瓶颈。',
+      summary: '本季度经营业绩创历史新高。关键经营指标方面，季度营收同比增长15%，毛利率提升2.1个百分点。产品交付方面，季度产出总量156台，同比增长15%。紧急任务方面，“数字化工厂一期上线”圆满完成。重大质量问题方面，通过引入激光干涉仪在线检测，重大质量问题解决率达100%。资源配套方面，通过引入第二供应商，有效缓解了铸件供应瓶颈，协调效果显著。',
       metrics: [
         { label: '季度营收达成', value: '105%', trend: 'UP', description: '超额完成季度目标' },
         { label: '季度产出总量', value: '156台', trend: 'UP', description: '同比增长15%' },
@@ -918,7 +920,7 @@ export const mockDashboardStats: DashboardStats = {
       id: 'comp-y-1',
       subject: 'COMPREHENSIVE',
       period: 'YEARLY',
-      summary: '本年度关键经营指标全面达标，产品生产和交付规模创历史新高。紧急和重点任务完成率100%。重大质量问题得到系统性解决，质量管理体系进一步完善。资源配套方面，实现了关键零部件的自主可控，抗风险能力显著增强。',
+      summary: '本年度经营目标全面达成。关键经营指标方面，年度营收增长22%，利润总额增长18%。产品交付方面，年度交付总量620台，产能实现跨越式增长。紧急任务方面，成功完成“省级智能制造示范企业”申报及验收。重大质量问题方面，系统性解决了主轴径向跳动超差的顽疾，质量管理体系进一步完善。资源配套方面，实现了关键零部件的自主可控，供应链抗风险能力显著增强。',
       metrics: [
         { label: '年度营收增长', value: '22%', trend: 'UP', description: '创历史新高' },
         { label: '年度交付总量', value: '620台', trend: 'UP', description: '产能实现跨越' },

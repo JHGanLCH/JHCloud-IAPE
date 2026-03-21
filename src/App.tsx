@@ -99,7 +99,7 @@ const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[]
   const [period, setPeriod] = useState<AIInsight['period']>('DAILY');
 
   // Find the most recent insight for the selected period
-  const insight = [...insights].reverse().find(i => i.subject === 'COMPREHENSIVE' && i.period === period);
+  const insight = [...insights].reverse().find(i => i.period === period);
 
   if (isGenerating && !insight) {
     return (
@@ -134,13 +134,6 @@ const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[]
 
   return (
     <div className="space-y-8 pb-12 relative">
-      {isGenerating && (
-        <div className="absolute top-4 right-4 z-50 flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg animate-pulse">
-          <Zap size={14} className="animate-spin" />
-          <span>AI 正在更新实时洞察...</span>
-        </div>
-      )}
-      
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
         <div className="flex items-center gap-4">
@@ -190,7 +183,11 @@ const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[]
                   <div className="bg-indigo-50/30 p-6 rounded-2xl border border-indigo-100">
                     <div className="flex items-center gap-2 mb-3 text-indigo-600">
                       <FileText size={18} />
-                      <span className="text-sm font-bold uppercase tracking-wider">全景核心摘要</span>
+                      <span className="text-sm font-bold uppercase tracking-wider">
+                        {period === 'DAILY' ? '当日生产情况' : 
+                         period === 'WEEKLY' ? '本周任务和完成情况' : 
+                         '关键经营指标、交付与重点任务报告'}
+                      </span>
                     </div>
                     <p className="text-base text-gray-800 leading-relaxed font-medium">
                       {insight.summary}
@@ -225,7 +222,9 @@ const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[]
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 text-amber-600">
                       <Lightbulb size={20} />
-                      <span className="text-sm font-bold uppercase tracking-wider">全链路优化建议</span>
+                      <span className="text-sm font-bold uppercase tracking-wider">
+                        {period === 'DAILY' || period === 'WEEKLY' ? '预警与建议' : '进一步预警与建议'}
+                      </span>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {insight.suggestions.map((s, idx) => (
@@ -247,7 +246,9 @@ const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[]
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-2 text-rose-600">
                       <AlertTriangle size={24} />
-                      <h4 className="font-bold text-gray-900 text-lg">异常与风险</h4>
+                      <h4 className="font-bold text-gray-900 text-lg">
+                        {period === 'DAILY' || period === 'WEEKLY' ? '生产相关异常发生和处理情况' : '重大质量问题与资源配套协调'}
+                      </h4>
                     </div>
                   </div>
                   
@@ -275,7 +276,7 @@ const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[]
                     <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 w-[78%]" />
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-3 text-center">基于全量生产数据实时计算</p>
+                    <p className="text-[10px] text-gray-400 mt-3 text-center">基于全量生产数据深度分析</p>
                   </div>
                 </div>
               </div>
@@ -3893,67 +3894,6 @@ export default function App() {
     return { total, completed, delayed, avgProgress };
   }, []);
 
-  useEffect(() => {
-    const generateInitialInsights = async () => {
-      // Check if we already have real comprehensive insights for all periods
-      const realDaily = insights.some(i => i.subject === 'COMPREHENSIVE' && i.period === 'DAILY' && !i.id.startsWith('comp-d'));
-      const realWeekly = insights.some(i => i.subject === 'COMPREHENSIVE' && i.period === 'WEEKLY' && !i.id.startsWith('comp-w'));
-      const realMonthly = insights.some(i => i.subject === 'COMPREHENSIVE' && i.period === 'MONTHLY' && !i.id.startsWith('comp-m'));
-      const realQuarterly = insights.some(i => i.subject === 'COMPREHENSIVE' && i.period === 'QUARTERLY' && !i.id.startsWith('comp-q'));
-      const realYearly = insights.some(i => i.subject === 'COMPREHENSIVE' && i.period === 'YEARLY' && !i.id.startsWith('comp-y'));
-      
-      if (realDaily && realWeekly && realMonthly && realQuarterly && realYearly) return;
-      
-      setIsGenerating(true);
-      try {
-        const dashboardStats: DashboardStats = {
-          ...mockDashboardStats,
-          totalOrders: stats.total,
-          completedOrders: stats.completed,
-          delayedOrders: stats.delayed,
-          averageProgress: stats.avgProgress,
-        };
-        
-        const newInsights: AIInsight[] = [];
-        
-        if (!realDaily) {
-          const daily = await generateComprehensiveAIInsight(dashboardStats, 'DAILY');
-          newInsights.push(daily);
-        }
-        
-        if (!realWeekly) {
-          const weekly = await generateComprehensiveAIInsight(dashboardStats, 'WEEKLY');
-          newInsights.push(weekly);
-        }
-        
-        if (!realMonthly) {
-          const monthly = await generateComprehensiveAIInsight(dashboardStats, 'MONTHLY');
-          newInsights.push(monthly);
-        }
-
-        if (!realQuarterly) {
-          const quarterly = await generateComprehensiveAIInsight(dashboardStats, 'QUARTERLY');
-          newInsights.push(quarterly);
-        }
-
-        if (!realYearly) {
-          const yearly = await generateComprehensiveAIInsight(dashboardStats, 'YEARLY');
-          newInsights.push(yearly);
-        }
-        
-        if (newInsights.length > 0) {
-          setInsights(prev => [...prev, ...newInsights]);
-        }
-      } catch (error) {
-        console.error("Failed to generate initial AI insights:", error);
-      } finally {
-        setIsGenerating(false);
-      }
-    };
-
-    generateInitialInsights();
-  }, [stats]);
-
   const handleDrillDown = (type: string, title: string) => {
     let columns: { key: string; label: string }[] = [];
     let data: any[] = [];
@@ -4509,7 +4449,12 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                {decisionTab === 'AI_INSIGHTS' && <AIInsightsDashboard insights={insights} isGenerating={isGenerating} />}
+                {decisionTab === 'AI_INSIGHTS' && (
+                  <AIInsightsDashboard 
+                    insights={insights} 
+                    isGenerating={isGenerating} 
+                  />
+                )}
                 {decisionTab === 'MANAGEMENT' && <ManagementDashboard stats={mockDashboardStats} onDrillDown={handleDrillDown} />}
                 {decisionTab === 'DECISION' && <DecisionSupport />}
               </motion.div>
