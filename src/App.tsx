@@ -98,8 +98,9 @@ import { generateComprehensiveAIInsight } from './services/geminiService';
 const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[], isGenerating?: boolean }) => {
   const [period, setPeriod] = useState<AIInsight['period']>('DAILY');
 
-  // Find the most recent insight for the selected period
-  const insight = [...insights].reverse().find(i => i.period === period);
+  // Find the most recent comprehensive insight for the selected period, or fall back to any insight for that period
+  const insight = [...insights].reverse().find(i => i.period === period && i.subject === 'COMPREHENSIVE') || 
+                  [...insights].reverse().find(i => i.period === period);
 
   if (isGenerating && !insight) {
     return (
@@ -186,7 +187,7 @@ const AIInsightsDashboard = ({ insights, isGenerating }: { insights: AIInsight[]
                       <span className="text-sm font-bold uppercase tracking-wider">
                         {period === 'DAILY' ? '当日生产情况' : 
                          period === 'WEEKLY' ? '本周任务和完成情况' : 
-                         '关键经营指标、交付与重点任务报告'}
+                         '关键经营指标、交付、重点任务、质量与资源配套报告'}
                       </span>
                     </div>
                     <p className="text-base text-gray-800 leading-relaxed font-medium">
